@@ -1094,7 +1094,7 @@ window.catalogData["Пермский край"] = [
 },
 { number: 50,
   name: "ГБПОУ \"Пермский краевой колледж искусств и культуры\",
-    website: "https://pkkik59.ru/",
+  website: "https://pkkik59.ru/",
   vk: "https://vk.com/pkkiikperm",
   address: "614066, Пермский край, город Пермь, улица Мира 72",
   phone: "8 (342) 221-59-51",
