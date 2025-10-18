@@ -1,149 +1,117 @@
-// scripts/main.js
-// Работает с данными формата:
-// window.catalogData = window.catalogData || {};
-// window.catalogData["Республика Татарстан"] = [ { ... }, { type:"heading", title:"ВПО" }, { ... } ];
-
+// === Работает с window.catalogData ===
 (function () {
-  // ---------- DOM ----------
-  const tableBody   = document.getElementById("institutions-body");
-  const emptyState  = document.getElementById("empty-state");
+  const tableBody = document.getElementById("institutions-body");
+  const emptyState = document.getElementById("empty-state");
   const searchInput = document.getElementById("search");
-  const tabsWrap    = document.querySelector(".region-buttons");
+  const regionButtons = document.querySelectorAll(".region-button");
 
-  // ---------- УТИЛИТЫ ----------
-  function qstr(v) { return (v ?? "").toString(); }
+  let currentRegion =
+    document.querySelector(".region-button.active")?.dataset.region ||
+    "Республика Татарстан";
 
-  function highlight(text, query) {
-    if (!query) return qstr(text);
+  function highlightMatch(text, query) {
+    if (!query) return text ?? "";
     const safe = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    return qstr(text).replace(new RegExp(safe, "gi"), m => `<mark>${m}</mark>`);
+    const re = new RegExp(safe, "gi");
+    return String(text ?? "").replace(re, (m) => `<mark>${m}</mark>`);
   }
 
-  function getRegions() {
-    const src = window.catalogData || {};
-    return Object.keys(src);
+  function getRegionData(region) {
+    return (window.catalogData && window.catalogData[region]) || [];
   }
 
-  // ---------- Состояние ----------
-  let currentRegion = null;
-
-  // ---------- Рендер кнопок регионов (если контейнер есть на странице) ----------
-  function renderRegionTabs() {
-    const regions = getRegions();
-    if (!tabsWrap || !regions.length) return;
-
-    // если уже есть кнопки — не пересоздаём
-    if (tabsWrap.querySelector("button")) return;
-
-    tabsWrap.innerHTML = regions.map((r, i) => `
-      <button class="region-button ${i === 0 ? "active" : ""}"
-              data-region="${r}" role="tab"
-              aria-selected="${i === 0 ? "true" : "false"}">${r}</button>
-    `).join("");
-
-    tabsWrap.querySelectorAll(".region-button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        tabsWrap.querySelectorAll(".region-button").forEach(b => {
-          b.classList.remove("active");
-          b.setAttribute("aria-selected", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-selected", "true");
-        currentRegion = btn.dataset.region;
-        rebuild();
-      });
-    });
-  }
-
-  // ---------- Основной рендер таблицы ----------
-  function renderRows(rows) {
-    const query = searchInput ? searchInput.value.trim().toLowerCase() : "";
+  function renderRows(list) {
+    const query = searchInput.value.trim().toLowerCase();
     tableBody.innerHTML = "";
 
-    const filtered = rows.filter(item => {
-      if (item.type === "heading") return query === ""; // «шапку» показываем только без поиска
+    const filtered = list.filter((item) => {
+      if (item.type === "heading") return query === "";
       if (!query) return true;
 
-      const inName = qstr(item.name).toLowerCase().includes(query);
-      const inNum  = qstr(item.number).toLowerCase().includes(query);
-      const inDirs = (item.directions || []).some(d =>
-        qstr(d.code).toLowerCase().includes(query) ||
-        qstr(d.title).toLowerCase().includes(query)
+      const inName = (item.name || "").toLowerCase().includes(query);
+      const inNum = ((item.number ?? "") + "").toLowerCase().includes(query);
+      const inDirs = (item.directions || []).some(
+        (d) =>
+          (d.code || "").toLowerCase().includes(query) ||
+          (d.title || "").toLowerCase().includes(query)
       );
       return inName || inNum || inDirs;
     });
 
-    if (!filtered.length) {
+    if (filtered.length === 0) {
       emptyState.hidden = false;
       return;
     }
     emptyState.hidden = true;
 
-    filtered.forEach((item, idx) => {
-      // Секция ВПО в виде мини-`thead`
+    filtered.forEach((item, index) => {
       if (item.type === "heading") {
-        const tr = document.createElement("tr");
-        tr.className = "table-subhead";
-        tr.innerHTML = `
+        const sub = document.createElement("tr");
+        sub.className = "table-subhead";
+        sub.innerHTML = `
           <th scope="col">№</th>
           <th scope="col">${item.title}</th>
           <th scope="col">Направления подготовки Номер / наименование специальности</th>
         `;
-        tableBody.appendChild(tr);
+        tableBody.appendChild(sub);
         return;
       }
 
-      const tr = document.createElement("tr");
+      const row = document.createElement("tr");
 
-      // №
-      const tdNum = document.createElement("td");
-      const shown = (item.number ?? (idx + 1)).toString();
-      tdNum.setAttribute("data-label", "№");
-      tdNum.innerHTML = highlight(shown, query);
+      const numberCell = document.createElement("td");
+      const shownNumber = (item.number ?? index + 1).toString();
+      numberCell.innerHTML = highlightMatch(shownNumber, query);
+      numberCell.setAttribute("data-label", "№");
 
-      // Информация
-      const tdInfo = document.createElement("td");
-      tdInfo.setAttribute("data-label", "Каталог специальностей и профессионального образования");
-      tdInfo.innerHTML = `
-        <div class="institution-name">${highlight(item.name, query)}</div>
+      const infoCell = document.createElement("td");
+      infoCell.setAttribute(
+        "data-label",
+        "Каталог специальностей и профессионального образования"
+      );
+      infoCell.innerHTML = `
+        <div class="institution-name">${highlightMatch(item.name, query)}</div>
         <ul class="contact-list">
           <li><strong>Сайт:</strong> ${
-            item.website ? `<a href="${item.website}" target="_blank" rel="noopener">${item.website}</a>` : ""
+            item.website
+              ? `<a href="${item.website}" target="_blank" rel="noopener">${item.website}</a>`
+              : ""
           }</li>
           <li><strong>Группа VK:</strong> ${
-            item.vk ? `<a href="${item.vk}" target="_blank" rel="noopener">${item.vk}</a>` : ""
+            item.vk
+              ? `<a href="${item.vk}" target="_blank" rel="noopener">${item.vk}</a>`
+              : ""
           }</li>
-          <li><strong>Адрес:</strong> ${qstr(item.address)}</li>
-          <li><strong>Тел.:</strong> ${qstr(item.phone)}</li>
+          <li><strong>Адрес:</strong> ${item.address || ""}</li>
+          <li><strong>Тел.:</strong> ${item.phone || ""}</li>
           <li><strong>E-mail:</strong> ${
             item.email ? `<a href="mailto:${item.email}">${item.email}</a>` : ""
           }</li>
         </ul>
       `;
 
-      // Направления
-      const tdDirs = document.createElement("td");
-      tdDirs.setAttribute("data-label","Направления подготовки Номер / наименование специальности");
-      const ul = document.createElement("ul");
-      ul.className = "specializations";
-      (item.directions || []).forEach(d => {
+      const dirsCell = document.createElement("td");
+      dirsCell.setAttribute(
+        "data-label",
+        "Направления подготовки Номер / наименование специальности"
+      );
+      const listEl = document.createElement("ul");
+      listEl.className = "specializations";
+      (item.directions || []).forEach((dir) => {
         const li = document.createElement("li");
-        li.innerHTML = `${highlight(d.code, query)} ${highlight(d.title, query)}`;
-        ul.appendChild(li);
+        li.innerHTML = `${highlightMatch(dir.code, query)} ${highlightMatch(
+          dir.title,
+          query
+        )}`;
+        listEl.appendChild(li);
       });
-      tdDirs.appendChild(ul);
+      dirsCell.appendChild(listEl);
 
-      tr.appendChild(tdNum);
-      tr.appendChild(tdInfo);
-      tr.appendChild(tdDirs);
-      tableBody.appendChild(tr);
+      row.appendChild(numberCell);
+      row.appendChild(infoCell);
+      row.appendChild(dirsCell);
+      tableBody.appendChild(row);
     });
-  }
-
-  // ---------- Контроллер ----------
-  function getRegionData(region) {
-    const src = window.catalogData || {};
-    return src[region] || [];
   }
 
   function rebuild() {
@@ -151,35 +119,20 @@
     renderRows(data);
   }
 
-  // ---------- Инициализация ----------
-  (function init() {
-    // Если кнопки регионов заранее размечены в HTML — используем их,
-    // иначе сгенерируем из window.catalogData
-    const presetActive = document.querySelector(".region-button.active");
-    if (presetActive) {
-      currentRegion = presetActive.dataset.region;
-      // навесим обработчики
-      document.querySelectorAll(".region-button").forEach(btn => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".region-button").forEach(b => {
-            b.classList.remove("active");
-            b.setAttribute("aria-selected", "false");
-          });
-          btn.classList.add("active");
-          btn.setAttribute("aria-selected", "true");
-          currentRegion = btn.dataset.region;
-          rebuild();
-        });
+  searchInput.addEventListener("input", rebuild);
+
+  regionButtons.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      regionButtons.forEach((b) => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
       });
-    } else {
-      renderRegionTabs();
-      currentRegion = getRegions()[0] || "";
-    }
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
+      currentRegion = btn.dataset.region;
+      rebuild();
+    })
+  );
 
-    if (searchInput) {
-      searchInput.addEventListener("input", rebuild);
-    }
-    rebuild();
-  })();
+  rebuild();
 })();
-
