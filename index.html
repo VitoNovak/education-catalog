@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Каталог образовательных учреждений</title>
-  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/main.css"/>
 </head>
 <body>
   <header>
     <h1>Каталог образовательных учреждений</h1>
+
     <div class="region-buttons" role="tablist" aria-label="Выбор региона">
-      <button class="region-button active" data-region="tatarstan" role="tab" aria-selected="true">Республика Татарстан</button>
-      <button class="region-button" data-region="perm" role="tab" aria-selected="false">Пермский край</button>
-      <button class="region-button" data-region="sverdlovsk" role="tab" aria-selected="false">Свердловская область</button>
-      <button class="region-button" data-region="chelyabinsk" role="tab" aria-selected="false">Челябинская область</button>
-      <button class="region-button" data-region="tyumen" role="tab" aria-selected="false">Тюменская область</button>
+      <!-- Кнопки можно расширять — логика рендера универсальная -->
+      <button class="region-button active" data-region="Республика Татарстан" role="tab" aria-selected="true">Республика Татарстан</button>
+      <button class="region-button" data-region="Пермский край" role="tab" aria-selected="false">Пермский край</button>
+      <button class="region-button" data-region="Свердловская область" role="tab" aria-selected="false">Свердловская область</button>
+      <button class="region-button" data-region="Челябинская область" role="tab" aria-selected="false">Челябинская область</button>
+      <button class="region-button" data-region="Тюменская область" role="tab" aria-selected="false">Тюменская область</button>
     </div>
 
     <div class="search-container">
@@ -43,3 +45,4 @@
   <script src="scripts/main.js"></script>
 </body>
 </html>
+
