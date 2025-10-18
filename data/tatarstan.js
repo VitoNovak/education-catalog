@@ -1,4 +1,5 @@
-[
+window.catalogData = window.catalogData || {};
+window.catalogData["Республика Татарстан"] = [
   {
     region: "Республика Татарстан",
     number: 1,
@@ -2057,3 +2058,4 @@
     { code: "38.02.07", title: "Банковское дело" },
     { code: "38.02.01", title: "Экономика и бухгалтерский учет (по отраслям)" }
 ]
+    ];
