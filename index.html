@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Каталог образовательных учреждений</title>
-  <link rel="stylesheet" href="styles/main.css"/>
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
   <header>
     <h1>Каталог образовательных учреждений</h1>
 
     <div class="region-buttons" role="tablist" aria-label="Выбор региона">
-      <!-- Кнопки можно расширять — логика рендера универсальная -->
       <button class="region-button active" data-region="Республика Татарстан" role="tab" aria-selected="true">Республика Татарстан</button>
       <button class="region-button" data-region="Пермский край" role="tab" aria-selected="false">Пермский край</button>
       <button class="region-button" data-region="Свердловская область" role="tab" aria-selected="false">Свердловская область</button>
@@ -42,6 +41,14 @@
     </div>
   </main>
 
+  <!-- ПОДКЛЮЧАЕМ ДАННЫЕ РЕГИОНОВ (можно добавлять ещё скрипты ниже) -->
+  <script src="data/tatarstan.js"></script>
+  <!-- <script src="data/perm.js"></script> -->
+  <!-- <script src="data/sverdlovsk.js"></script> -->
+  <!-- <script src="data/chelyabinsk.js"></script> -->
+  <!-- <script src="data/tyumen.js"></script> -->
+
+  <!-- ЛОГИКА ОТРИСОВКИ -->
   <script src="scripts/main.js"></script>
 </body>
 </html>
