@@ -1,122 +1,150 @@
-// ===== инициализация =====
-window.catalogData = window.catalogData || {};
+// scripts/main.js
+const DEFAULT_REGION = "Пермский край";
 
-const tableBody   = document.getElementById("institutions-body");
-const emptyState  = document.getElementById("empty-state");
+const tbody = document.getElementById("tbody");
+const regionsBar = document.getElementById("regions");
 const searchInput = document.getElementById("search");
-const regionBtns  = document.querySelectorAll(".region-button");
+const emptyState = document.getElementById("empty");
 
-// стартовый регион: Пермский край, иначе первый из доступных
-let currentRegion = window.catalogData["Пермский край"]
-  ? "Пермский край"
-  : Object.keys(window.catalogData)[0] || "";
+let currentRegion = null;
+let lastQuery = "";
 
-// подсветим активную кнопку
-function syncActiveButton() {
-  regionBtns.forEach(btn => {
-    const isActive = btn.dataset.region === currentRegion;
-    btn.classList.toggle("active", isActive);
-    btn.setAttribute("aria-selected", String(isActive));
-  });
+// ===== helpers
+function listRegions() {
+  return Object.keys(window.catalogData || {}).sort((a, b) => a.localeCompare(b, "ru"));
 }
-syncActiveButton();
-
-// ===== утилита подсветки =====
-function highlightMatch(text, query) {
-  if (!query) return text ?? "";
-  const safe = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const re = new RegExp(safe, "gi");
-  return String(text ?? "").replace(re, m => `<mark>${m}</mark>`);
-}
-
-// ===== рендер =====
-function render() {
-  const data = window.catalogData[currentRegion] || [];
-  const q = searchInput.value.trim().toLowerCase();
-
-  tableBody.innerHTML = "";
-  let rows = data.filter(item => {
-    if (item.type === "heading") return q === ""; // разделитель только без поиска
-    if (!q) return true;
-
-    const inNum  = ((item.number ?? "") + "").toLowerCase().includes(q);
-    const inName = (item.name || "").toLowerCase().includes(q);
-    const dirs   = item.directions || [];
-    const inDirs = dirs.some(d =>
-      (d.code||"").toLowerCase().includes(q) ||
-      (d.title||"").toLowerCase().includes(q)
-    );
-    return inNum || inName || inDirs;
-  });
-
-  if (!rows.length) {
-    emptyState.hidden = false;
-    return;
+function setActiveButton(name) {
+  for (const btn of regionsBar.querySelectorAll("button")) {
+    btn.classList.toggle("active", btn.dataset.region === name);
   }
-  emptyState.hidden = true;
+}
+function buildRegionsUI() {
+  const frag = document.createDocumentFragment();
+  listRegions().forEach(region => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = region;
+    btn.dataset.region = region;
+    btn.addEventListener("click", () => {
+      if (currentRegion !== region) {
+        currentRegion = region;
+        setActiveButton(region);
+        render();
+      }
+    });
+    frag.appendChild(btn);
+  });
+  regionsBar.innerHTML = "";
+  regionsBar.appendChild(frag);
+}
+function norm(s) { return (s ?? "").toString().toLowerCase(); }
 
-  rows.forEach((item, idx) => {
-    // ---- разделитель ВПО как мини-thead ----
+// показываем в тексте ссылки только домен (href остаётся полным)
+function displayURL(url) {
+  try {
+    const u = new URL(url);
+    return u.hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+function matchesQueryItem(item, q) {
+  if (!q) return true;
+  if (item.type === "heading") return norm(item.title).includes(q);
+
+  if (item.level && Array.isArray(item.programs)) {
+    if (norm(item.level).includes(q)) return true;
+    return item.programs.some(p => norm(p.code).includes(q) || norm(p.title).includes(q));
+  }
+
+  const inNumber = norm(item.number).includes(q);
+  const inName   = norm(item.name).includes(q);
+  let inDirections = false;
+  if (Array.isArray(item.directions)) {
+    inDirections = item.directions.some(d =>
+      norm(d.code).includes(q) || norm(d.title).includes(q)
+    );
+  }
+  return inNumber || inName || inDirections;
+}
+
+function render() {
+  const regionData = window.catalogData[currentRegion] || [];
+  const q = lastQuery;
+  let visible = 0;
+  let html = "";
+
+  for (const item of regionData) {
+    if (!matchesQueryItem(item, q)) continue;
+
+    // heading
     if (item.type === "heading") {
-      const sub = document.createElement("tr");
-      sub.className = "table-subhead";
-      sub.innerHTML = `
-        <th scope="col">№</th>
-        <th scope="col">${item.title}</th>
-        <th scope="col">Направления подготовки Номер / наименование специальности</th>
-      `;
-      tableBody.appendChild(sub);
-      return;
+      html += `<tr class="heading-row"><th colspan="4">${item.title}</th></tr>`;
+      visible++;
+      continue;
     }
 
-    const tr = document.createElement("tr");
+    // level/programs блок
+    if (item.level && Array.isArray(item.programs)) {
+      const progs = item.programs
+        .map(p => `<div class="dir"><span class="code">${p.code || ""}</span> ${p.title || ""}</div>`)
+        .join("");
+      html += `<tr class="heading-row"><th colspan="4">${item.level}</th></tr>`;
+      html += `<tr><td class="number"></td><td class="name"></td><td class="contacts"></td><td class="directions">${progs}</td></tr>`;
+      visible += 2;
+      continue;
+    }
 
-    const tdNum = document.createElement("td");
-    const shown = (item.number ?? (idx + 1)).toString();
-    tdNum.innerHTML = highlightMatch(shown, q);
-    tdNum.setAttribute("data-label", "№");
+    // обычная запись + синонимы полей
+    const site  = item.site  || item.website || "";
+    const group = item.group || item.vk      || "";
+    const tel   = item.tel   || item.phone   || "";
 
-    const tdInfo = document.createElement("td");
-    tdInfo.setAttribute("data-label","Каталог специальностей и профессионального образования");
-    tdInfo.innerHTML = `
-      <div class="institution-name">${highlightMatch(item.name, q)}</div>
-      <ul class="contact-list">
-        <li><strong>Сайт:</strong> ${item.website ? `<a href="${item.website}" target="_blank" rel="noopener">${item.website}</a>` : ""}</li>
-        <li><strong>Группа VK:</strong> ${item.vk ? `<a href="${item.vk}" target="_blank" rel="noopener">${item.vk}</a>` : ""}</li>
-        <li><strong>Адрес:</strong> ${item.address || ""}</li>
-        <li><strong>Тел.:</strong> ${item.phone || ""}</li>
-        <li><strong>E-mail:</strong> ${item.email ? `<a href="mailto:${item.email}">${item.email}</a>` : ""}</li>
-      </ul>
+    const contacts = [
+      site  ? `Сайт: <a href="${site}" target="_blank" rel="noopener">${displayURL(site)}</a>` : "",
+      group ? `Группа: <a href="${group}" target="_blank" rel="noopener">${displayURL(group)}</a>` : "",
+      item.address ? `Адрес: ${item.address}` : "",
+      tel ? `Тел.: ${tel}` : "",
+      item.email ? `E-mail: <a href="mailto:${item.email}">${item.email}</a>` : ""
+    ].filter(Boolean).join("<br>");
+
+    const dirs = Array.isArray(item.directions)
+      ? item.directions.map(d =>
+          `<div class="dir"><span class="code">${d.code || ""}</span> ${d.title || ""}</div>`
+        ).join("")
+      : "";
+
+    html += `
+      <tr>
+        <td class="number">${item.number ?? ""}</td>
+        <td class="name">${item.name ?? ""}</td>
+        <td class="contacts">${contacts}</td>
+        <td class="directions">${dirs}</td>
+      </tr>
     `;
+    visible++;
+  }
 
-    const tdDirs = document.createElement("td");
-    tdDirs.setAttribute("data-label","Направления подготовки Номер / наименование специальности");
-    const ul = document.createElement("ul");
-    ul.className = "specializations";
-    (item.directions || []).forEach(d => {
-      const li = document.createElement("li");
-      li.innerHTML = `${highlightMatch(d.code, q)} ${highlightMatch(d.title, q)}`;
-      ul.appendChild(li);
-    });
-    tdDirs.appendChild(ul);
-
-    tr.appendChild(tdNum);
-    tr.appendChild(tdInfo);
-    tr.appendChild(tdDirs);
-    tableBody.appendChild(tr);
-  });
+  tbody.innerHTML = html;
+  emptyState.hidden = visible > 0;
 }
 
-// ===== события =====
-searchInput.addEventListener("input", render);
-regionBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentRegion = btn.dataset.region;
-    syncActiveButton();
-    render();
-  });
+function debounce(fn, ms) {
+  let t = 0;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), ms); };
+}
+
+const onSearch = debounce(() => {
+  lastQuery = norm(searchInput.value.trim());
+  requestAnimationFrame(render);
+}, 150);
+
+document.addEventListener("DOMContentLoaded", () => {
+  buildRegionsUI();
+  const regions = listRegions();
+  currentRegion = regions.includes(DEFAULT_REGION) ? DEFAULT_REGION : regions[0] || null;
+  setActiveButton(currentRegion);
+  render();
+  searchInput.addEventListener("input", onSearch);
 });
-
-// первый рендер
-render();
-
