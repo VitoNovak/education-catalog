@@ -14,12 +14,22 @@ h1{margin:0 0 1rem;color:var(--primary-blue);text-align:center}
 .search-input:focus{outline:0;box-shadow:0 0 0 4px rgba(30,99,240,.15)}
 
 main{max-width:1200px;margin:0 auto;padding:2rem 1rem 3rem}
-table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(30,99,240,.12)}
+
+/* ====== ДЕСКТОПНАЯ ТАБЛИЦА ====== */
+table.catalog{
+  width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(30,99,240,.12);table-layout:fixed
+}
 thead{background:var(--primary-blue);color:#fff}
 th,td{padding:1.25rem 1rem;vertical-align:top;text-align:left}
-th:nth-child(1),td:nth-child(1){width:60px;text-align:center;font-weight:600}
+
+/* сетка: 60px / 40% / 60% */
+.catalog th:nth-child(1), .catalog td:nth-child(1){width:60px;text-align:center;font-weight:600}
+.catalog th:nth-child(2), .catalog td:nth-child(2){width:40%}
+.catalog th:nth-child(3), .catalog td:nth-child(3){width:60%}
+
 tbody tr:nth-child(even){background:rgba(30,99,240,.04)}
-tbody tr:hover{background:rgba(30,99,240,.1)}
+tbody tr:hover{background:rgba(30,99,240,.08)}
 
 .institution-name{font-size:1.05rem;font-weight:700;margin-bottom:.75rem}
 .contact-list{margin:0;padding:0;list-style:none}
@@ -29,124 +39,43 @@ a:hover,a:focus{text-decoration:underline}
 .specializations{margin:0;padding-left:1.1rem}
 .empty-state{text-align:center;padding:2rem;color:#4a4a4a}
 
-@media (max-width:900px){
-  th:nth-child(2),td:nth-child(2){width:45%}
-  table{font-size:.95rem}
-}
-@media (max-width:700px){
-  table,thead,tbody,th,td,tr{display:block}
-  thead{display:none}
-  tbody tr{margin-bottom:1.5rem;border:1px solid rgba(30,99,240,.1);border-radius:12px;overflow:hidden;background:#fff}
-  td{display:flex;gap:.75rem;padding:1rem}
-  td::before{content:attr(data-label);font-weight:600;color:var(--primary-blue);flex:0 0 160px}
-  td:nth-child(1){justify-content:center;font-size:1.2rem;background:rgba(30,99,240,.08)}
-}
-
-/* мини-шапка-разделитель для ВПО (как thead) */
 .table-subhead th{padding:.9rem 1rem;background:var(--primary-blue);color:#fff;font-weight:700}
-.table-subhead th:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px;width:48px;text-align:center}
+.table-subhead th:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px;width:60px;text-align:center}
 .table-subhead th:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
 
-/* фиксы длинных ссылок и подсветки */
-.contact-list a { word-break: break-all; overflow-wrap: anywhere; }
-.specializations li { word-break: break-word; overflow-wrap: anywhere; }
-mark { background: #ffec99; padding: 0 .15em; border-radius: 3px; }
+/* перенос длинных ссылок и направлений */
+.contact-list a, .specializations li{word-break:break-word;overflow-wrap:anywhere}
 
-/* адаптация мини-шапки ВПО под мобилу */
-@media (max-width:700px){
-  .table-subhead{
-    display:grid;
-    grid-template-columns:60px 1fr 1fr;
-    align-items:center;
-    gap:.25rem;
-    margin-bottom:.25rem;
-    border-radius:10px;
-    overflow:hidden;
-  }
-  .table-subhead th{display:block;padding:.8rem .9rem}
-  .table-subhead th:first-child{ text-align:center }
-}
-/* ===== MOBILE: карточная таблица ===== */
+/* ====== МОБИЛЬНАЯ ВЕРСТКА (карточки, подписи сверху) ====== */
 @media (max-width: 768px) {
-  /* контейнер таблицы */
-  .catalog{
-    display:block !important;
-    overflow-x:auto !important;
-    -webkit-overflow-scrolling:touch;
-    border-radius:12px;
-    background:#fff;
-  }
+  .catalog{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;background:#fff}
+  .catalog thead{display:none}
 
-  /* скрываем шапку-thead на мобиле */
-  .catalog thead{ display:none !important; }
+  .catalog tbody, .catalog tr, .catalog td{display:block;width:100%}
+  .catalog tbody tr{margin-bottom:1rem;border:1px solid rgba(30,99,240,.12);border-radius:12px;overflow:hidden;background:#fff}
 
-  /* превращаем строки в блоки-карточки */
-  .catalog tbody,
-  .catalog tr,
-  .catalog td{
-    display:block !important;
-    width:100% !important;
-  }
-
-  .catalog tbody tr{
-    margin-bottom:1rem;
-    border:1px solid rgba(30,99,240,.12);
-    border-radius:12px;
-    overflow:hidden;
-    background:#fff;
-  }
-
-  /* ячейки внутри карточки */
-  .catalog td{
-    display:flex !important;
-    align-items:flex-start;
-    gap:.75rem;
-    padding:1rem;
-  }
-
-  /* подписи слева (data-label из HTML) */
+  /* подписи над контентом — чтобы сайты/адреса всегда были видны */
+  .catalog td{display:block;padding:.9rem 1rem}
   .catalog td::before{
     content:attr(data-label);
-    font-weight:600;
-    color:var(--primary-blue);
-    flex:0 0 140px;
-  }
-
-  /* первая «ячейка» — номер */
-  .catalog td:nth-child(1){
-    justify-content:center;
-    font-size:1.1rem;
-    background:rgba(30,99,240,.08);
-  }
-
-  /* мини-шапка ВПО (разделитель) в виде полосы */
-  .table-subhead{
-    display:grid;
-    grid-template-columns:60px 1fr 1fr;
-    gap:.25rem;
-    margin:0 0 .5rem;
-    border-radius:10px;
-    overflow:hidden;
-  }
-  .table-subhead th{
     display:block;
-    padding:.8rem .9rem;
-    background:var(--primary-blue);
-    color:#fff;
+    margin-bottom:.5rem;
     font-weight:700;
+    color:var(--primary-blue);
   }
-  .table-subhead th:first-child{ text-align:center }
+  .catalog td:nth-child(1){
+    font-size:1.05rem;
+    background:rgba(30,99,240,.04);
+    padding:.6rem 1rem;
+  }
+
+  /* разделитель ВПО (мини-шапка) */
+  .table-subhead{display:block;margin:0 0 .5rem;border-radius:10px;overflow:hidden}
+  .table-subhead th{display:block;padding:.7rem .9rem;background:var(--primary-blue);color:#fff;font-weight:700}
 }
 
 /* ещё компактнее на очень узких экранах */
-@media (max-width: 480px){
-  .catalog td::before{ flex:0 0 110px; }
+@media (max-width: 420px){
+  .catalog td{padding:.7rem .8rem}
+  .catalog td::before{margin-bottom:.4rem;font-size:.95rem}
 }
-
-/* перенос длинных ссылок и текста */
-.contact-list a,
-.specializations li{
-  word-break:break-word;
-  overflow-wrap:anywhere;
-}
-
