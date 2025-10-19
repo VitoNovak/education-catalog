@@ -1748,9 +1748,6 @@ window.catalogData["Челябинская область"] = [
       { code: '38.02.08', title: 'Торговое дело' }
     ]
   },
-window.catalogData = window.catalogData || {};
-window.catalogData['Челябинская область'] = window.catalogData['Челябинская область'] || [];
-window.catalogData['Челябинская область'].push(...[
   {
     number: 23,
     name: 'ФГБОУ ВО «Южно-Уральский государственный гуманитарно-педагогический университет»',
