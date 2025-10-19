@@ -1,31 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Каталог образовательных учреждений</title>
-  <link rel="stylesheet" href="styles/main.css">
+
+  <link rel="stylesheet" href="styles/main.css" />
+
+  <!-- глобальное хранилище данных -->
+  <script>window.catalogData = window.catalogData || {};</script>
+
+  <!-- данные регионов (подключай реальные файлы data/*.js) -->
+  <script src="data/perm.js"></script>
+  <script src="data/tatarstan.js"></script>
+  <script src="data/sverdlovsk.js"></script>
+  <script src="data/chelyabinsk.js"></script>
+  <script src="data/tyumen.js"></script>
 </head>
 <body>
   <header>
     <h1>Каталог образовательных учреждений</h1>
 
     <div class="region-buttons" role="tablist" aria-label="Выбор региона">
-      <button class="region-button" data-region="Пермский край" role="tab" aria-selected="false">Пермский край</button>
-      <button class="region-button active" data-region="Республика Татарстан" role="tab" aria-selected="true">Республика Татарстан</button>
-      <button class="region-button" data-region="Свердловская область" role="tab" aria-selected="false">Свердловская область</button>
-      <button class="region-button" data-region="Челябинская область" role="tab" aria-selected="false">Челябинская область</button>
-      <button class="region-button" data-region="Тюменская область" role="tab" aria-selected="false">Тюменская область</button>
+      <!-- Если хочешь — оставь эти кнопки. Скрипт сам подхватит регионы из window.catalogData,
+           но кнопки здесь дают быстрый доступ при тесте -->
+      <button class="region-button" data-region="Пермский край" role="tab">Пермский край</button>
+      <button class="region-button" data-region="Республика Татарстан" role="tab">Республика Татарстан</button>
+      <button class="region-button" data-region="Свердловская область" role="tab">Свердловская область</button>
+      <button class="region-button" data-region="Челябинская область" role="tab">Челябинская область</button>
+      <button class="region-button" data-region="Тюменская область" role="tab">Тюменская область</button>
     </div>
 
     <div class="search-container">
       <label for="search">Поиск по коду специальности или названию направления</label>
-      <input id="search" class="search-input" type="search" placeholder="Например: 31.02.01 или Лечебное дело"/>
+      <input id="search" class="search-input" type="search" placeholder="Например: 09.02.07 или Информатика" />
     </div>
   </header>
 
   <main>
-    <table aria-live="polite">
+    <table class="catalog" aria-live="polite">
       <thead>
         <tr>
           <th scope="col">№</th>
@@ -37,19 +50,11 @@
     </table>
 
     <div id="empty-state" class="empty-state" hidden>
-      По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска.
+      По вашему запросу ничего не найдено.
     </div>
   </main>
 
-  <!-- ПОДКЛЮЧАЕМ ДАННЫЕ РЕГИОНОВ (можно добавлять ещё скрипты ниже) -->
-  <script src="data/perm.js"></script>
-  <script src="data/tatarstan.js"></script>
-  <script src="data/sverdlovsk.js"></script>
-  <script src="data/chelyabinsk.js"></script> 
-  <script src="data/tyumen.js"></script>
-
-  <!-- ЛОГИКА ОТРИСОВКИ -->
+  <!-- логика -->
   <script src="scripts/main.js"></script>
 </body>
 </html>
-
