@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Каталог образовательных учреждений</title>
 
-  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/main.css?v=10" />
 
   <!-- глобальное хранилище данных -->
   <script>window.catalogData = window.catalogData || {};</script>
 
-  <!-- данные регионов (подключай реальные файлы data/*.js) -->
+  <!-- данные регионов (оставь только те, что реально есть у тебя в /data) -->
   <script src="data/perm.js"></script>
   <script src="data/tatarstan.js"></script>
   <script src="data/sverdlovsk.js"></script>
@@ -22,8 +22,6 @@
     <h1>Каталог образовательных учреждений</h1>
 
     <div class="region-buttons" role="tablist" aria-label="Выбор региона">
-      <!-- Если хочешь — оставь эти кнопки. Скрипт сам подхватит регионы из window.catalogData,
-           но кнопки здесь дают быстрый доступ при тесте -->
       <button class="region-button" data-region="Пермский край" role="tab">Пермский край</button>
       <button class="region-button" data-region="Республика Татарстан" role="tab">Республика Татарстан</button>
       <button class="region-button" data-region="Свердловская область" role="tab">Свердловская область</button>
@@ -54,7 +52,6 @@
     </div>
   </main>
 
-  <!-- логика -->
-  <script src="scripts/main.js"></script>
+  <script src="scripts/main.js?v=10"></script>
 </body>
 </html>
