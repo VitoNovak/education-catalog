@@ -66,3 +66,87 @@ mark { background: #ffec99; padding: 0 .15em; border-radius: 3px; }
   .table-subhead th{display:block;padding:.8rem .9rem}
   .table-subhead th:first-child{ text-align:center }
 }
+/* ===== MOBILE: карточная таблица ===== */
+@media (max-width: 768px) {
+  /* контейнер таблицы */
+  .catalog{
+    display:block !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch;
+    border-radius:12px;
+    background:#fff;
+  }
+
+  /* скрываем шапку-thead на мобиле */
+  .catalog thead{ display:none !important; }
+
+  /* превращаем строки в блоки-карточки */
+  .catalog tbody,
+  .catalog tr,
+  .catalog td{
+    display:block !important;
+    width:100% !important;
+  }
+
+  .catalog tbody tr{
+    margin-bottom:1rem;
+    border:1px solid rgba(30,99,240,.12);
+    border-radius:12px;
+    overflow:hidden;
+    background:#fff;
+  }
+
+  /* ячейки внутри карточки */
+  .catalog td{
+    display:flex !important;
+    align-items:flex-start;
+    gap:.75rem;
+    padding:1rem;
+  }
+
+  /* подписи слева (data-label из HTML) */
+  .catalog td::before{
+    content:attr(data-label);
+    font-weight:600;
+    color:var(--primary-blue);
+    flex:0 0 140px;
+  }
+
+  /* первая «ячейка» — номер */
+  .catalog td:nth-child(1){
+    justify-content:center;
+    font-size:1.1rem;
+    background:rgba(30,99,240,.08);
+  }
+
+  /* мини-шапка ВПО (разделитель) в виде полосы */
+  .table-subhead{
+    display:grid;
+    grid-template-columns:60px 1fr 1fr;
+    gap:.25rem;
+    margin:0 0 .5rem;
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .table-subhead th{
+    display:block;
+    padding:.8rem .9rem;
+    background:var(--primary-blue);
+    color:#fff;
+    font-weight:700;
+  }
+  .table-subhead th:first-child{ text-align:center }
+}
+
+/* ещё компактнее на очень узких экранах */
+@media (max-width: 480px){
+  .catalog td::before{ flex:0 0 110px; }
+}
+
+/* перенос длинных ссылок и текста */
+.contact-list a,
+.specializations li{
+  word-break:break-word;
+  overflow-wrap:anywhere;
+}
+
