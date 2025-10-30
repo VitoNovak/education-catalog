@@ -1,5 +1,5 @@
-jswindow.catalogData = window.catalogData || {};
-window.catalogData["Краснодарский край (СПО)"] = [
+window.catalogData = window.catalogData || {};
+window.catalogData["Краснодарский край"] = [
   {
     number: 1,
     name: "ГБПОУ «Краснодарский архитектурно-строительный техникум»",
