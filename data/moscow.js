@@ -949,9 +949,6 @@ window.catalogData["Москва"] = [
       { code: "54.02.08", title: "Техника и искусство фотографии" }
     ]
   },
-  javascriptwindow.catalogData = window.catalogData || {};
-window.catalogData["Москва (СПО)"] = window.catalogData["Москва (СПО)"] || [];
-window.catalogData["Москва (СПО)"].push(
   {
     number: 51,
     name: "«Колледж программирования и кибербезопасности», структурное подразделение МИРЭА Российского технологического университета",
