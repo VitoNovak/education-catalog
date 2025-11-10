@@ -4546,7 +4546,7 @@ window.catalogData["Москва"] = [
   number: 102,
   name: "Военная академия Генерального штаба Вооруженных Сил Российской Федерации",
   website: "https://vagsh.mil.ru/",
- 21  vk: "https://vagsh.mil.ru/",
+  vk: "https://vagsh.mil.ru/",
   address: "119571, город Москва, проспект Вернадского, д. 100",
   phone: "8 (495) 693-74-12",
   email: "vagsh@mil.ru",
