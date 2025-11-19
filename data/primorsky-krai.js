@@ -1,3 +1,4 @@
+window.catalogData = window.catalogData || {};
 window.catalogData["Приморский край"] = [
   {
     region: "Приморский край",
