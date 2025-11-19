@@ -3380,7 +3380,6 @@ window.catalogData["Санкт-Петербург"] = [
     region: "Санкт-Петербург",
     number: 73,
     name: "Санкт-Петербургский институт гостеприимства",
-    ",
     website: "https://www.spig.spb.ru/",
     vk: "https://vk.com/myspig",
     address: "194156, Санкт-Петербург, пр. Энгельса, д. 42 лит. А",
