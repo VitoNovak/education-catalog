@@ -1,4 +1,6 @@
-  {
+window.catalogData = window.catalogData || {};
+window.catalogData["Нижегородская область"] = [
+{
     region: "Нижегородская область",
     number: 1,
     name: "ГБПОУ «Нижегородский промышленно-технологический техникум»",
