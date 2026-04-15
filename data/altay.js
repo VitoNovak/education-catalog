@@ -1,5 +1,5 @@
 window.catalogData = window.catalogData || {};
-window.catalogData["Алтайский край (СПО)"] = [
+window.catalogData["Алтайский край"] = [
   {
     number: 1,
     name: "КГБПОУ «Алейский технологический техникум»",
