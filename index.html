@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Каталог образовательных учреждений</title>
 
-  <link rel="stylesheet" href="styles/main.css?v=10" />
+  <link rel="stylesheet" href="styles/main.css?v=11" />
 
-  <!-- глобальное хранилище данных -->
   <script>window.catalogData = window.catalogData || {};</script>
 
-  <!-- данные регионов (оставь только те, что реально есть у тебя в /data) -->
+  <!-- данные регионов -->
   <script src="data/perm.js"></script>
   <script src="data/tatarstan.js"></script>
   <script src="data/sverdlovsk.js"></script>
@@ -74,64 +73,77 @@
     <h1>Каталог образовательных учреждений</h1>
 
     <div class="region-buttons" role="tablist" aria-label="Выбор региона">
-      <button class="region-button" data-region="Пермский край" role="tab">Пермский край</button>
-      <button class="region-button" data-region="Республика Татарстан" role="tab">Республика Татарстан</button>
-      <button class="region-button" data-region="Свердловская область" role="tab">Свердловская область</button>
-      <button class="region-button" data-region="Челябинская область" role="tab">Челябинская область</button>
-      <button class="region-button" data-region="Тюменская область" role="tab">Тюменская область</button>
-      <button class="region-button" data-region="Кировская область" role="tab">Кировская область</button>
-      <button class="region-button" data-region="Пензенская область" role="tab">Пензенская область</button>
-      <button class="region-button" data-region="Республика Крым" role="tab">Республика Крым</button>
-      <button class="region-button" data-region="Республика Башкортостан" role="tab">Республика Башкортостан</button>
-      <button class="region-button" data-region="Ростовская область" role="tab">Ростовская область</button>
-      <button class="region-button" data-region="Краснодарский край" role="tab">Краснодарский край</button>
-      <button class="region-button" data-region="Красноярский край" role="tab">Красноярский край</button>
-      <button class="region-button" data-region="Калужская область" role="tab">Калужская область</button>
-      <button class="region-button" data-region="Москва" role="tab">Москва</button>
-      <button class="region-button active" data-region="Санкт-Петербург" role="tab">Санкт-Петербург</button>
-      <button class="region-button" data-region="Приморский край" role="tab">Приморский край</button>
-      <button class="region-button" data-region="Калининградская область" role="tab">Калининградская область</button>
-      <button class="region-button" data-region="Нижегородская область" role="tab">Нижегородская область</button>
-      <button class="region-button" data-region="Алтайский край" role="tab">Алтайский край</button>
-      <button class="region-button" data-region="Белгородская область" role="tab">Белгородская область</button>
-      <button class="region-button" data-region="Брянская область" role="tab">Брянская область</button>
-      <button class="region-button" data-region="Волгоградская область" role="tab">Волгоградская область</button>
-      <button class="region-button" data-region="Воронежская область" role="tab">Воронежская область</button>
-      <button class="region-button" data-region="Еврейская автономная область" role="tab">Еврейская автономная область</button>
-      <button class="region-button" data-region="Иркутская область" role="tab">Иркутская область</button>
-      <button class="region-button" data-region="Кабардино-Балкарская Республика" role="tab">Кабардино-Балкарская Республика</button>
-      <button class="region-button" data-region="Камчатский край" role="tab">Камчатский край</button>
-      <button class="region-button" data-region="Карачаево-Черкесская Республика" role="tab">Карачаево-Черкесская Республика</button>
-      <button class="region-button" data-region="Кемеровская область" role="tab">Кемеровская область</button>
-      <button class="region-button" data-region="Курганская область" role="tab">Курганская область</button>
-      <button class="region-button" data-region="Курская область" role="tab">Курская область</button>
-      <button class="region-button" data-region="Липецкая область" role="tab">Липецкая область</button>
-      <button class="region-button" data-region="Магаданская область" role="tab">Магаданская область</button>
-      <button class="region-button" data-region="Мурманская область" role="tab">Мурманская область</button>
-      <button class="region-button" data-region="Новосибирская область" role="tab">Новосибирская область</button>
-      <button class="region-button" data-region="Оренбургская область" role="tab">Оренбургская область</button>
-      <button class="region-button" data-region="Омская область" role="tab">Омская область</button>
-      <button class="region-button" data-region="Орловская область" role="tab">Орловская область</button>
-      <button class="region-button" data-region="Республика Ингушетия" role="tab">Республика Ингушетия</button>
-      <button class="region-button" data-region="Республика Бурятия" role="tab">Республика Бурятия</button>
-      <button class="region-button" data-region="Республика Калмыкия" role="tab">Республика Калмыкия</button>
-      <button class="region-button" data-region="Республика Марий Эл" role="tab">Республика Марий Эл</button>
-      <button class="region-button" data-region="Республика Карелия" role="tab">Республика Карелия</button>
-      <button class="region-button" data-region="Республика Коми" role="tab">Республика Коми</button>
-      <button class="region-button" data-region="Самарская область" role="tab">Самарская область</button>
-      <button class="region-button" data-region="Республика Тыва" role="tab">Республика Тыва</button>
-      <button class="region-button" data-region="Саратовская область" role="tab">Саратовская область</button>
-      <button class="region-button" data-region="Сахалинская область" role="tab">Сахалинская область</button>
-      <button class="region-button" data-region="Томская область" role="tab">Томская область</button>
-      <button class="region-button" data-region="Ставропольский край" role="tab">Ставропольский край</button>
-      <button class="region-button" data-region="Тульская область" role="tab">Тульская область</button>
-      <button class="region-button" data-region="Тамбовская область" role="tab">Тамбовская область</button>
-      <button class="region-button" data-region="Ярославская область" role="tab">Ярославская область</button>
-      <button class="region-button" data-region="Удмуртская Республика" role="tab">Удмуртская Республика</button>
-      <button class="region-button" data-region="Ульяновская область" role="tab">Ульяновская область</button>
-      <button class="region-button" data-region="Забайкальский край" role="tab">Забайкальский край</button>
-      <button class="region-button" data-region="Ханты-Мансийский автономный округ — Югра" role="tab">Ханты-Мансийский автономный округ — Югра</button>
+
+      <button class="region-button" data-region="Пермский край">Пермский край</button>
+      <button class="region-button" data-region="Республика Татарстан">Республика Татарстан</button>
+      <button class="region-button" data-region="Свердловская область">Свердловская область</button>
+      <button class="region-button" data-region="Челябинская область">Челябинская область</button>
+      <button class="region-button" data-region="Тюменская область">Тюменская область</button>
+      <button class="region-button" data-region="Кировская область">Кировская область</button>
+      <button class="region-button" data-region="Пензенская область">Пензенская область</button>
+      <button class="region-button" data-region="Республика Крым">Республика Крым</button>
+
+      <button class="region-button" data-region="Республика Башкортостан">Республика Башкортостан</button>
+      <button class="region-button" data-region="Ростовская область">Ростовская область</button>
+      <button class="region-button" data-region="Краснодарский край">Краснодарский край</button>
+      <button class="region-button" data-region="Красноярский край">Красноярский край</button>
+      <button class="region-button" data-region="Калужская область">Калужская область</button>
+      <button class="region-button" data-region="Москва">Москва</button>
+      <button class="region-button active" data-region="Санкт-Петербург">Санкт-Петербург</button>
+
+      <button class="region-button" data-region="Приморский край">Приморский край</button>
+      <button class="region-button" data-region="Калининградская область">Калининградская область</button>
+      <button class="region-button" data-region="Нижегородская область">Нижегородская область</button>
+      <button class="region-button" data-region="Алтайский край">Алтайский край</button>
+      <button class="region-button" data-region="Белгородская область">Белгородская область</button>
+      <button class="region-button" data-region="Брянская область">Брянская область</button>
+      <button class="region-button" data-region="Волгоградская область">Волгоградская область</button>
+      <button class="region-button" data-region="Воронежская область">Воронежская область</button>
+      <button class="region-button" data-region="Еврейская автономная область">Еврейская автономная область</button>
+
+      <button class="region-button" data-region="Иркутская область">Иркутская область</button>
+      <button class="region-button" data-region="Кабардино-Балкарская Республика">Кабардино-Балкарская Республика</button>
+      <button class="region-button" data-region="Камчатский край">Камчатский край</button>
+      <button class="region-button" data-region="Карачаево-Черкесская Республика">Карачаево-Черкесская Республика</button>
+      <button class="region-button" data-region="Кемеровская область">Кемеровская область</button>
+      <button class="region-button" data-region="Курганская область">Курганская область</button>
+      <button class="region-button" data-region="Курская область">Курская область</button>
+      <button class="region-button" data-region="Липецкая область">Липецкая область</button>
+
+      <button class="region-button" data-region="Магаданская область">Магаданская область</button>
+      <button class="region-button" data-region="Мурманская область">Мурманская область</button>
+      <button class="region-button" data-region="Новосибирская область">Новосибирская область</button>
+      <button class="region-button" data-region="Оренбургская область">Оренбургская область</button>
+      <button class="region-button" data-region="Омская область">Омская область</button>
+      <button class="region-button" data-region="Орловская область">Орловская область</button>
+
+      <button class="region-button" data-region="Республика Ингушетия">Республика Ингушетия</button>
+      <button class="region-button" data-region="Республика Бурятия">Республика Бурятия</button>
+      <button class="region-button" data-region="Республика Калмыкия">Республика Калмыкия</button>
+      <button class="region-button" data-region="Республика Марий Эл">Республика Марий Эл</button>
+      <button class="region-button" data-region="Республика Карелия">Республика Карелия</button>
+      <button class="region-button" data-region="Республика Коми">Республика Коми</button>
+
+      <button class="region-button" data-region="Самарская область">Самарская область</button>
+      <button class="region-button" data-region="Республика Тыва">Республика Тыва</button>
+      <button class="region-button" data-region="Саратовская область">Саратовская область</button>
+      <button class="region-button" data-region="Сахалинская область">Сахалинская область</button>
+      <button class="region-button" data-region="Томская область">Томская область</button>
+      <button class="region-button" data-region="Ставропольский край">Ставропольский край</button>
+      <button class="region-button" data-region="Тульская область">Тульская область</button>
+      <button class="region-button" data-region="Тамбовская область">Тамбовская область</button>
+      <button class="region-button" data-region="Ярославская область">Ярославская область</button>
+
+      <button class="region-button" data-region="Удмуртская Республика">Удмуртская Республика</button>
+      <button class="region-button" data-region="Ульяновская область">Ульяновская область</button>
+      <button class="region-button" data-region="Забайкальский край">Забайкальский край</button>
+      <button class="region-button" data-region="Ханты-Мансийский автономный округ — Югра">Ханты-Мансийский автономный округ — Югра</button>
+
     </div>
+
+    <button id="toggleRegions" class="region-toggle">
+      Показать все регионы
+    </button>
 
     <div class="search-container">
       <label for="search">Поиск по коду специальности или названию направления</label>
@@ -140,12 +152,12 @@
   </header>
 
   <main>
-    <table class="catalog" aria-live="polite">
+    <table class="catalog">
       <thead>
         <tr>
-          <th scope="col">№</th>
-          <th scope="col">Каталог специальностей среднего профессионального образования</th>
-          <th scope="col">Направления подготовки Номер / наименование специальности</th>
+          <th>№</th>
+          <th>Каталог специальностей СПО</th>
+          <th>Направления подготовки</th>
         </tr>
       </thead>
       <tbody id="institutions-body"></tbody>
@@ -156,6 +168,36 @@
     </div>
   </main>
 
-  <script src="scripts/main.js?v=10"></script>
+  <script src="scripts/main.js?v=11"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const MAX_VISIBLE = 8;
+    const buttons = document.querySelectorAll('.region-button');
+    const toggleBtn = document.getElementById('toggleRegions');
+
+    let expanded = false;
+
+    function updateRegions() {
+      buttons.forEach((btn, index) => {
+        if (index >= MAX_VISIBLE) {
+          btn.style.display = expanded ? 'inline-block' : 'none';
+        }
+      });
+
+      toggleBtn.textContent = expanded
+        ? 'Скрыть регионы'
+        : 'Показать все регионы';
+    }
+
+    toggleBtn.addEventListener('click', function () {
+      expanded = !expanded;
+      updateRegions();
+    });
+
+    updateRegions();
+  });
+  </script>
+
 </body>
 </html>
